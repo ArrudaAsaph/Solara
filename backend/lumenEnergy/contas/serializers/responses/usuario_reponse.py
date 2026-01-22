@@ -1,8 +1,18 @@
 from rest_framework import serializers
 from contas.models import Usuario
 
-class UsuarioResponse(serializers.ModelSerializer):
+class UsuarioSimpleResponse(serializers.ModelSerializer):
 
+    class Meta:
+        model = Usuario
+        fields = [
+            'username',
+            'email',
+            'tipo_usuario',
+            'tipo_status'
+        ]
+
+class UsuarioResponse(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = [
@@ -10,6 +20,9 @@ class UsuarioResponse(serializers.ModelSerializer):
             'username',
             'email',
             'tipo_usuario',
-            'tipo_status'
+            'tipo_status',
+            'data_criacao',
+            'data_atualizacao',
+            'ultimo_login'
         ]
 

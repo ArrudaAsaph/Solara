@@ -46,7 +46,7 @@ class Usuario(AbstractUser):
         return f"{self.username} - {self.email} - {self.last_login}"
     
     @property
-    def empresa_responsavel (self):
+    def empresa_vinculada (self):
         if hasattr(self, "empresa"):
             return self.empresa
         return self.pessoa.empresa

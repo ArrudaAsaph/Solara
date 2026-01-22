@@ -23,13 +23,17 @@ class LoginService:
             raise AuthenticationFailed("Usuário está bloqueado.")
             
         refresh = RefreshToken.for_user(usuario)
+        
 
-        return {
+        retorno = {
             "access": str(refresh.access_token),
             "refresh": str(refresh),
-            "usuario": {
-                "id": usuario.id,
-                "username": usuario.username,
-                "email": usuario.email,
-            }
         }
+
+        if usuario.tipo_usuario ==  'PERFIL':
+            retorno["pessoa"] = usuario.pessoa
+        else:
+            retorno["empresa"] = usuario.empresa
+
+        
+        return retorno
