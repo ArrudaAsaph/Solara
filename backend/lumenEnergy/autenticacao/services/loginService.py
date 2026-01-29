@@ -30,7 +30,7 @@ class LoginService:
             "refresh": str(refresh),
         }
 
-        if usuario.tipo_usuario ==  'PERFIL':
+        if usuario.tipo_usuario ==  Usuario.TipoUsuario.PESSOA:
             retorno["pessoa"] = usuario.pessoa
         else:
             retorno["empresa"] = usuario.empresa

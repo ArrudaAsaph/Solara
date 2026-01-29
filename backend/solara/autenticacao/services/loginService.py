@@ -34,6 +34,16 @@ class LoginService:
                 }
             )
 
+        if usuario.empresa_vinculada.usuario.tipo_status != Usuario.StatusUsuario.ATIVA:
+            return Erro(
+                **erro_base,
+                mensagem="Empresa do usuário está bloqueado",
+                status_code=403,
+                field="status",
+                data={
+                    "status": usuario.empresa_vinculada.usuario.tipo_status
+                }
+            )
         if usuario.tipo_status != Usuario.StatusUsuario.ATIVA:
             return Erro(
                 **erro_base,

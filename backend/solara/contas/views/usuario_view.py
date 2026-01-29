@@ -5,130 +5,96 @@ from drf_yasg.utils import swagger_auto_schema
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_yasg import openapi
 from rest_framework.permissions import IsAuthenticated
-
+from core.error import Erro
 from contas.serializers import (
-    UsuarioUpdateRequest,
-    UsuarioResponse
+    UsuarioUpdateRequest, UsuarioUpdateMeRequest,
+    UsuarioResponse, UsuarioSimpleResponse
 )
 from contas.services import UsuarioService
-from contas.filtros import UsuarioFilter
+
+class UsuarioViewMe(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_summary = "Retorna o usuário logado",
+        responses = {
+            200: UsuarioSimpleResponse,
+            401: openapi.Response("Não autenticado"),
+            },
+        
+        tags = ["Usuário"],
+    )
+
+    def get(self, request):
+        usuario = UsuarioService.UsuarioMeService.listar(usuario_logado = request.user)
+
+        if isinstance(usuario, Erro):
+            return Response(
+                usuario.to_response(),
+                status = usuario.status_code
+            )
+
+        return Response(
+            UsuarioSimpleResponse(usuario).data,
+            status = status.HTTP_200_OK
+        )
+
+    @swagger_auto_schema(
+        operation_summary="Atualizar dados do usuário",
+        request_body=UsuarioUpdateMeRequest,
+        responses = {
+            200: UsuarioResponse,
+            400: openapi.Response("Erro de validação"),
+            401: openapi.Response("Não autenticado"),
+            409: openapi.Response("Conflito"),
+            },
+        tags=["Usuário"],
+    )
+
+    def put(self, request):
+        serializer = UsuarioUpdateMeRequest(data = request.data)
+        serializer.is_valid(raise_exception=True)
+
+        resultado = UsuarioService.UsuarioMeService.atualizar(
+                usuario_logado = request.user,
+                data = serializer.validated_data
+            )
+
+        if isinstance(resultado, Erro):
+            return Response(
+                resultado.to_response(),
+                status=resultado.status_code
+            )
+
+        return Response(
+            UsuarioResponse(resultado).data,
+            status=status.HTTP_200_OK
+        )
 
 
 class UsuarioView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-    operation_summary="Listar usuários",
-    manual_parameters=[
-        openapi.Parameter(
-            "username",
-            openapi.IN_QUERY,
-            description="Filtrar por username (contém)",
-            type=openapi.TYPE_STRING,
-        ),
-        openapi.Parameter(
-            "email",
-            openapi.IN_QUERY,
-            description="Filtrar por email (contém)",
-            type=openapi.TYPE_STRING,
-        ),
-        openapi.Parameter(
-            "tipo_usuario",
-            openapi.IN_QUERY,
-            description="Tipo do usuário",
-            type=openapi.TYPE_STRING,
-        ),
-        openapi.Parameter(
-            "ativo",
-            openapi.IN_QUERY,
-            description="Usuário ativo",
-            type=openapi.TYPE_BOOLEAN,
-        ),
-    ],
-    responses={200: UsuarioResponse(many=True)},
-    tags=["Usuários"],
-)
+        operation_summary = "Retorna uma lista de usuários",
+        responses = {
+            200: UsuarioSimpleResponse,
+            401: openapi.Response("Não autenticado"),
+            },
+        
+        tags = ["Usuários"],
+    )
 
     def get(self, request):
+        usuario = UsuarioService.listar(usuario_logado = request.user)
 
-        usuarios = UsuarioService.listar(
-            filtros_data=request.query_params
-        )
-
-
-        return Response(
-            UsuarioResponse(usuarios, many=True).data,
-            status=status.HTTP_200_OK
-        )
-
-class UsuarioDetalheView(APIView):
-    # ========================
-    # LIST
-    # ========================
-    @swagger_auto_schema(
-        operation_summary="Listar usuário por id",
-        responses={200: UsuarioResponse(many=True)},
-        tags=["Usuários"],
-    )
-    def get(self, request, id=None):
-
-        # GET /usuarios/{id}
-        if id:
-            usuario = UsuarioService.buscar_por_id(id=id)
+        if isinstance(usuario, Erro):
             return Response(
-                UsuarioResponse(usuario).data,
-                status=status.HTTP_200_OK
+                usuario.to_response(),
+                status = usuario.status_code
             )
 
-        # GET /usuarios
-        usuarios = UsuarioService.listar()
         return Response(
-            UsuarioResponse(usuarios, many=True).data,
-            status=status.HTTP_200_OK
-        )
-
-    # ========================
-    # UPDATE (dados)
-    # ========================
-    @swagger_auto_schema(
-        operation_summary="Atualizar usuário",
-        request_body=UsuarioUpdateRequest,
-        responses={200: UsuarioResponse},
-        tags=["Usuários"],
-    )
-    def put(self, request, id):
-        serializer = UsuarioUpdateRequest(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        usuario = UsuarioService.atualizar(
-            id=id,
-            data=serializer.validated_data
-        )
-
-        return Response(
-            UsuarioResponse(usuario).data,
-            status=status.HTTP_200_OK
-        )
-
-    # ========================
-    # ATIVAR / DESATIVAR
-    # ========================
-    @swagger_auto_schema(
-        operation_summary="Ativar ou desativar usuário",
-        request_body=UsuarioUpdateRequest,
-        responses={200: UsuarioResponse},
-        tags=["Usuários"],
-    )
-    def patch(self, request, id):
-        serializer = UsuarioUpdateRequest(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        usuario = UsuarioService.atualizar(
-            id=id,
-            data=serializer.validated_data
-        )
-
-        return Response(
-            UsuarioResponse(usuario).data,
-            status=status.HTTP_200_OK
+            UsuarioSimpleResponse(usuario, many = True).data,
+            status = status.HTTP_200_OK
         )

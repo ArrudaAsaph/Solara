@@ -41,7 +41,7 @@ class CadastroView(APIView):
         if isinstance(resultado, Erro):
             return Response(
                 resultado.to_response(),
-                status=resultado.status_code
+                status = resultado.status_code
             )
 
         response_serializer = PessoaResponse(resultado)

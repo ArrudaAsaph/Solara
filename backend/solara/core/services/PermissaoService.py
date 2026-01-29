@@ -14,10 +14,10 @@ class PermissaoService:
     HIERARQUIA = [
         "EMPRESA",
         "GERENTE",
-        "ANALISTA",
-        "FINANCEIRO",
+        "ANALISTA_FINANCEIRO",
+        "ANALISTA_ENERGETICO",
         "INVESTIDOR",
-        "CLIENTE",
+        "CONSUMIDOR",
     ]
 
     def __init__(self, user):
@@ -127,3 +127,62 @@ class PermissaoService:
                 "perfis_permitidos": perfis,
             },
         )
+
+    def pode_ver(self, *, pessoa_alvo: Pessoa) -> bool:
+        if self._validar_usuario():
+            return False
+
+        perfil_logado = self.perfil_logado()
+        if not perfil_logado:
+            return False
+
+        if perfil_logado == "EMPRESA":
+            return pessoa_alvo.usuario.tipo_usuario != Usuario.TipoUsuario.EMPRESA
+
+        if perfil_logado == Pessoa.TipoPerfil.GERENTE:
+            return (
+                pessoa_alvo.usuario.tipo_usuario != Usuario.TipoUsuario.EMPRESA
+                and pessoa_alvo.tipo_perfil != Pessoa.TipoPerfil.GERENTE
+            )
+
+        if perfil_logado in {
+            Pessoa.TipoPerfil.ANALISTA_FINANCEIRO,
+            Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
+        }:
+            return pessoa_alvo.tipo_perfil in {
+                Pessoa.TipoPerfil.CONSUMIDOR,
+                Pessoa.TipoPerfil.INVESTIDOR,
+            }
+
+        return False
+    
+    def hierarquia(self):
+        perfil_logado = self.perfil_logado()
+
+        if perfil_logado == "EMPRESA":
+            return [
+                Pessoa.TipoPerfil.GERENTE,
+                Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
+                Pessoa.TipoPerfil.ANALISTA_FINANCEIRO,
+                Pessoa.TipoPerfil.INVESTIDOR,
+                Pessoa.TipoPerfil.CONSUMIDOR
+            ]
+        
+        if perfil_logado == Pessoa.TipoPerfil.GERENTE:
+            return [
+                Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
+                Pessoa.TipoPerfil.ANALISTA_FINANCEIRO,
+                Pessoa.TipoPerfil.INVESTIDOR,
+                Pessoa.TipoPerfil.CONSUMIDOR
+            ]
+        
+        if perfil_logado in (
+                Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
+                Pessoa.TipoPerfil.ANALISTA_FINANCEIRO,
+            ):
+            return [
+                Pessoa.TipoPerfil.INVESTIDOR,
+                Pessoa.TipoPerfil.CONSUMIDOR
+            ]
+        
+        return []

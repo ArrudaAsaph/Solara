@@ -24,6 +24,7 @@ class PessoaResponse(serializers.ModelSerializer):
             'nome_completo',
             'primeiro_nome',
             'ultimo_nome',
+            'tipo_perfil',
             'telefone',
             'cpf',
             'email_contato',
