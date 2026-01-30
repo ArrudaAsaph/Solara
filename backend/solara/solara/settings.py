@@ -29,8 +29,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',           # Simple JWT
 
     # APPS
+    'autenticacao',
     'contas',
     'core',
+    'equipamentos',
+    'usinas',
+
 ]
 # ========= CONFIG =============
 SWAGGER_SETTINGS = {

@@ -1,0 +1,1 @@
+from .equipamento_response import EquipamentoResponse

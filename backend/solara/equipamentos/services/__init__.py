@@ -1,0 +1,1 @@
+from .equipamento_service import EquipamentoService

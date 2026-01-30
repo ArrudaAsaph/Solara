@@ -8,7 +8,19 @@ from core.services import PermissaoService
 from contas.models import Usuario, Pessoa
 
 class CadastroService():
+   
+    @classmethod
+    def _erro_base(cls, *, usuario_logado):
+        return {
+            "domain": "cadastro",
+            "entidade": "Pessoa",
+            "usuario": {
+                "id": getattr(usuario_logado, "id", None),
+                "username": getattr(usuario_logado, "username", None),
+            },
+        }
     
+
     @classmethod
     @transaction.atomic
     def criar(cls, *, usuario_logado, data):
@@ -59,15 +71,7 @@ class CadastroService():
             
     @classmethod
     def _antes_criar(cls, *, usuario_logado, data):
-        erro_base = {
-            "domain": "cadastro",
-            "entidade": "Pessoa",
-            "acao": "criar",
-            "usuario": {
-                "id": usuario_logado.id,
-                "username": usuario_logado.username,
-            },
-        }
+        erro_base = cls._erro_base(usuario_logado = usuario_logado)
 
         erro = cls._permissao(
             usuario_logado=usuario_logado,

@@ -33,7 +33,9 @@ urlpatterns = [
     ),
 
     # APIs
-    path("api/contas/", include("contas.urls")),
     path("api/auth/", include("autenticacao.urls")),
+    path("api/contas/", include("contas.urls")),
+    path("api/equipamentos/", include("equipamentos.urls")),
+
 
 ]
