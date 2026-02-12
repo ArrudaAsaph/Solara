@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/Solara:cached
+    working_dir: /workspaces/Solara
+    command: sleep infinity
+    environment:
+      DB_ENGINE: postgres
+      DB_NAME: solara
+      DB_USER: solara
+      DB_PASSWORD: solara
+      DB_HOST: db
+      DB_PORT: "5432"
+      DJANGO_DEBUG: "1"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_SECRET_KEY: django-insecure-devcontainer-solara
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: solara
+      POSTGRES_USER: solara
+      POSTGRES_PASSWORD: solara
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U solara -d solara"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

@@ -132,6 +132,7 @@ class CadastroService():
         if erros:
             return Erro(
                 **erro_base,
+                acao="criar",
                 mensagem="Erro de validação",
                 field=None,
                 status_code=409,
@@ -151,6 +152,7 @@ class CadastroService():
         if perfil_logado not in ["EMPRESA", Pessoa.TipoPerfil.GERENTE]:
             return Erro(
                 **erro_base,
+                acao="criar",
                 mensagem = "Usuário sem permissão para cadastro",
                 status_code = 403
             )
@@ -158,6 +160,7 @@ class CadastroService():
         if data["tipo_perfil"] == Pessoa.TipoPerfil.GERENTE and perfil_logado != "EMPRESA":
             return Erro(
                 **erro_base,
+                acao="criar",
                 mensagem = "Usuário sem permissão para cadastro",
                 extra = "Apenas a empresa pode cadastrar gerentes",
                 status_code = 403

@@ -1,5 +1,6 @@
 from contas.models import Pessoa, Empresa, Usuario
 from core.error import Erro
+from django.core.exceptions import ObjectDoesNotExist
 import logging
 
 permission_logger = logging.getLogger("core.permission")
@@ -22,6 +23,7 @@ class PermissaoService:
 
     def __init__(self, user):
         self.user = user
+        self.ultimo_erro = None
 
         self.erro_base = {
             "domain": "permissao",
@@ -38,10 +40,39 @@ class PermissaoService:
     # ------------------------------------------------------------------
 
     def _get_pessoa(self) -> Pessoa | None:
-        return getattr(self.user, "pessoa", None)
+        try:
+            return getattr(self.user, "pessoa", None)
+        except ObjectDoesNotExist:
+            return None
 
     def _get_empresa(self) -> Empresa | None:
-        return getattr(self.user, "empresa", None)
+        try:
+            return getattr(self.user, "empresa", None)
+        except ObjectDoesNotExist:
+            return None
+
+    def _erro(self, *, mensagem: str, status_code: int, data: dict | None = None):
+        erro = Erro(
+            **self.erro_base,
+            mensagem=mensagem,
+            status_code=status_code,
+            data=data or {},
+        )
+        self.ultimo_erro = erro
+        return erro
+
+    def _log_warning(self, erro: Erro):
+        permission_logger.warning(
+            erro.mensagem,
+            extra={
+                "domain": erro.domain,
+                "entidade": erro.entidade,
+                "acao": erro.acao,
+                "status_code": erro.status_code,
+                "data": erro.data,
+                "usuario": erro.usuario,
+            },
+        )
 
     # ------------------------------------------------------------------
     # Validações iniciais
@@ -98,11 +129,13 @@ class PermissaoService:
     # ------------------------------------------------------------------
 
     def acesso(self, perfis: list[str]):
+        self.ultimo_erro = None
+
         # 1️⃣ valida usuário
         erro = self._validar_usuario()
         if erro:
             self._log_warning(erro)
-            return erro
+            return False
 
         perfil = self.perfil_logado()
 
@@ -112,7 +145,7 @@ class PermissaoService:
                 status_code=403,
             )
             self._log_warning(erro)
-            return erro
+            return False
 
         # 2️⃣ valida permissão
         for perfil_requerido in perfis:
@@ -127,6 +160,8 @@ class PermissaoService:
                 "perfis_permitidos": perfis,
             },
         )
+        self._log_warning(erro)
+        return False
 
     def pode_ver(self, *, pessoa_alvo: Pessoa) -> bool:
         if self._validar_usuario():
@@ -157,6 +192,9 @@ class PermissaoService:
         return False
     
     def hierarquia(self):
+        if self._validar_usuario():
+            return []
+
         perfil_logado = self.perfil_logado()
 
         if perfil_logado == "EMPRESA":

@@ -46,7 +46,8 @@ class UsuarioService:
             return Erro(
                 **erro_base,
                 acao = "listar",
-                mensagem = "Usuario sem permissao de acesso"
+                mensagem = "Usuario sem permissao de acesso",
+                status_code = 403
             )
         
         qs = Usuario.objects.filter(
