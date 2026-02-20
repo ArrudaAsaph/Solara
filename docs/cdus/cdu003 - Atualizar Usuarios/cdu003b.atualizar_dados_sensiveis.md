@@ -12,7 +12,7 @@
 | **Código** | CDU003-B |
 | **Ator Principal** | Empresa / Gerente |
 | **Atores Secundários** | Sistema |
-| **Requisito Atendido** | RF02 |
+| **Requisito Atendido** | [RF02](../../requisitos/requisitos_funcionais.md#rf02) |
 
 ---
 
@@ -37,8 +37,8 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 - O ator deve estar autenticado no sistema.
 - O ator deve estar ativo e vinculado a uma empresa ativa.
 - O usuário alvo deve estar vinculado à mesma empresa do ator.
-- O usuário alvo deve possuir papel hierarquicamente inferior ao do ator (RN16).
-- **Se o dado a ser alterado for o tipo de perfil:** o novo perfil deve ser hierarquicamente inferior ao papel do ator (RN16).
+- O usuário alvo deve possuir papel hierarquicamente inferior ao do ator ([RN16](../../regras_de_negocio/regras_de_negocio.md#rn16)).
+- **Se o dado a ser alterado for o tipo de perfil:** o novo perfil deve ser hierarquicamente inferior ao papel do ator ([RN16](../../regras_de_negocio/regras_de_negocio.md#rn16)).
 
 ---
 
@@ -54,7 +54,7 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 
 | **Requisito** | **Descrição** |
 | :------------ | :------------ |
-| **RF02** | A empresa ou o gerente pode atualizar os dados cadastrais de usuários já existentes no sistema, mantendo o histórico das alterações. |
+| [**RF02**](../../requisitos/requisitos_funcionais.md#rf02) | A empresa ou o gerente pode atualizar os dados cadastrais de usuários já existentes no sistema, mantendo o histórico das alterações. |
 
 ---
 
@@ -62,11 +62,11 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 
 | **Código** | **Descrição** |
 | :--------: | :------------ |
-| **RN02** | Apenas empresas podem atualizar dados sensíveis de usuários do tipo gerente. O gerente não pode editar outro gerente. |
-| **RN05** | A empresa ou o gerente pode atualizar apenas usuários vinculados à mesma empresa à qual pertence. |
-| **RN16** | Um usuário somente pode atualizar dados de usuários com papel hierarquicamente inferior ao seu. Ao alterar o tipo de perfil, o novo perfil atribuído também deve ser inferior ao papel do ator. |
-| **RN17** | Somente empresas e gerentes podem alterar dados sensíveis (nome completo, CPF e tipo de perfil), respeitando a hierarquia (RN16), mediante confirmação da senha do ator que está realizando a alteração. |
-| **RN18** | Usuários não administrativos não podem alterar dados sensíveis de suas próprias contas. |
+| [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02) | Apenas empresas podem atualizar dados sensíveis de usuários do tipo gerente. O gerente não pode editar outro gerente. |
+| [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05) | A empresa ou o gerente pode atualizar apenas usuários vinculados à mesma empresa à qual pertence. |
+| [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) | Um usuário somente pode atualizar dados de usuários com papel hierarquicamente inferior ao seu. Ao alterar o tipo de perfil, o novo perfil atribuído também deve ser inferior ao papel do ator. |
+| [**RN17**](../../regras_de_negocio/regras_de_negocio.md#rn17) | Somente empresas e gerentes podem alterar dados sensíveis (nome completo, CPF e tipo de perfil), respeitando a hierarquia ([RN16](../../regras_de_negocio/regras_de_negocio.md#rn16)), mediante confirmação da senha do ator que está realizando a alteração. |
+| [**RN18**](../../regras_de_negocio/regras_de_negocio.md#rn18) | Usuários não administrativos não podem alterar dados sensíveis de suas próprias contas. |
 
 ---
 
@@ -75,16 +75,16 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 1 | Acessa a opção "Listar Usuários". | |
-| 2 | | Exibe a listagem de usuários dentro do escopo do ator (conforme RN16). |
+| 2 | | Exibe a listagem de usuários dentro do escopo do ator (conforme [RN16](../../regras_de_negocio/regras_de_negocio.md#rn16)). |
 | 3 | Seleciona um usuário da listagem. | |
 | 4 | | Exibe os dados cadastrais completos do usuário selecionado. |
 | 5 | Seleciona a opção "Editar". | |
 | 6 | | Exibe o formulário de edição. Os campos sensíveis (nome completo, CPF e tipo de perfil) estão habilitados para edição, com indicação visual destacando que a alteração exigirá confirmação de senha. |
 | 7 | Altera um ou mais campos sensíveis e seleciona "Salvar". | |
-| 8 | | Detecta alteração em campo sensível. Exibe modal de confirmação solicitando a **senha de acesso do ator**, conforme **RN17**. O modal exibe um resumo das alterações que serão aplicadas (campo, valor anterior → novo valor). |
+| 8 | | Detecta alteração em campo sensível. Exibe modal de confirmação solicitando a **senha de acesso do ator**, conforme [**RN17**](../../regras_de_negocio/regras_de_negocio.md#rn17). O modal exibe um resumo das alterações que serão aplicadas (campo, valor anterior → novo valor). |
 | 9 | Lê o resumo das alterações, informa a senha de acesso e confirma. | |
 | 10 | | Valida a senha informada. |
-| 11 | | Valida as Regras de Negócio **RN02** (se aplicável), **RN05**, **RN16** e **RN17**. |
+| 11 | | Valida as Regras de Negócio [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02) (se aplicável), [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05), [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) e [**RN17**](../../regras_de_negocio/regras_de_negocio.md#rn17). |
 | 12 | | Aplica as alterações. |
 | 13 | | Registra no histórico: campo alterado, valor anterior, novo valor, data/hora e identificação do ator responsável. |
 | 14 | Visualiza os dados atualizados do usuário com confirmação de sucesso. | |
@@ -98,7 +98,7 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.1 | Tenta acessar usuário não vinculado à sua empresa ou de nível hierárquico igual/superior. | |
-| 0.2 | | Valida as Regras de Negócio **RN05** e **RN16**. |
+| 0.2 | | Valida as Regras de Negócio [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16). |
 | 0.3 | | Bloqueia o acesso e exibe mensagem de acesso não autorizado. |
 
 ### Fluxo de Exceção II – Senha incorreta na confirmação
@@ -115,7 +115,7 @@ Permite à Empresa ou ao Gerente alterar os dados sensíveis de um usuário hier
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.8 | Tenta alterar o tipo de perfil do usuário para um papel de nível igual ou superior ao seu (ex.: gerente tentando promover outro usuário a gerente). | |
-| 0.9 | | Valida a Regra de Negócio **RN16**. |
+| 0.9 | | Valida a Regra de Negócio [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16). |
 | 0.10 | | Bloqueia a alteração e exibe mensagem informando que não é permitido atribuir perfil de nível igual ou superior ao do ator. O modal de senha não é exibido. |
 
 ### Fluxo de Exceção IV – Cancelamento no modal de confirmação

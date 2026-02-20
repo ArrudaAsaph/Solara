@@ -12,7 +12,7 @@
 | **Código** | CDU001-A |
 | **Ator Principal** | Empresa |
 | **Atores Secundários** | Sistema |
-| **Requisito Atendido** | RF01 |
+| **Requisito Atendido** | [RF01](../../requisitos/requisitos_funcionais.md#rf01) |
 
 ---
 
@@ -41,7 +41,7 @@ Permite à empresa cadastrar usuários operacionais da plataforma. Por ser o ato
 
 | **Requisito** | **Descrição** |
 | :------------ | :------------ |
-| **RF01** | A empresa pode cadastrar usuários no sistema, incluindo usuários do tipo Gerente. |
+| [**RF01**](../../requisitos/requisitos_funcionais.md#rf01) | A empresa pode cadastrar usuários no sistema, incluindo usuários do tipo Gerente. |
 
 ---
 
@@ -49,11 +49,11 @@ Permite à empresa cadastrar usuários operacionais da plataforma. Por ser o ato
 
 | **Código** | **Descrição** |
 | :--------: | :------------ |
-| **RN01** | Apenas gerentes e empresas podem cadastrar usuários no sistema. |
-| **RN02** | Apenas empresas podem gerenciar usuários do tipo gerente (cadastrar, atualizar, listar, ativar/desativar e controlar permissões e perfil). |
-| **RN03** | Não deve existir usuário que não esteja obrigatoriamente vinculado a uma pessoa ou a uma empresa. |
-| **RN07** | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
-| **RN16** | Um usuário somente pode cadastrar, atualizar, ativar/desativar ou gerenciar permissões de usuários com papel hierarquicamente inferior ao seu próprio dentro da mesma empresa **e se ele for do tipo, gerente ou empresa**. |
+| [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01) | Apenas gerentes e empresas podem cadastrar usuários no sistema. |
+| [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02) | Apenas empresas podem gerenciar usuários do tipo gerente (cadastrar, atualizar, listar, ativar/desativar e controlar permissões e perfil). |
+| [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03) | Não deve existir usuário que não esteja obrigatoriamente vinculado a uma pessoa ou a uma empresa. |
+| [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
+| [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) | Um usuário somente pode cadastrar, atualizar, ativar/desativar ou gerenciar permissões de usuários com papel hierarquicamente inferior ao seu próprio dentro da mesma empresa **e se ele for do tipo, gerente ou empresa**. |
 
 ---
 
@@ -66,7 +66,7 @@ Permite à empresa cadastrar usuários operacionais da plataforma. Por ser o ato
 | 3 | Seleciona a opção "Cadastrar Usuário". | |
 | 4 | | Exibe formulário de cadastro com campos: nome, e-mail e tipo de usuário (todos os níveis disponíveis, incluindo Gerente). O status é definido como **ativo** por padrão. |
 | 5 | Preenche os dados e confirma o cadastro. | |
-| 6 | | Valida as Regras de Negócio **RN01**, **RN02**, **RN03**, **RN07** e **RN16**, e cria o novo usuário no sistema. |
+| 6 | | Valida as Regras de Negócio [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01), [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02), [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03), [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16), e cria o novo usuário no sistema. |
 | 7 | Visualiza o usuário cadastrado na listagem. | |
 
 ---
@@ -78,6 +78,6 @@ Permite à empresa cadastrar usuários operacionais da plataforma. Por ser o ato
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.1 | Preenche o formulário com dados inválidos ou incompletos. | |
-| 0.2 | | Valida as Regras de Negócio **RN01**, **RN02**, **RN03**, **RN07** e **RN16** aplicáveis. |
+| 0.2 | | Valida as Regras de Negócio [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01), [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02), [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03), [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) aplicáveis. |
 | 0.3 | | Exibe mensagens de erro indicando campos inválidos ou duplicidade de dados. |
 | 0.4 | Corrige os dados informados e confirma novamente. | |

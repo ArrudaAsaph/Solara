@@ -12,7 +12,7 @@
 | **Código** | CDU001-B |
 | **Ator Principal** | Gerente |
 | **Atores Secundários** | Sistema |
-| **Requisito Atendido** | RF01 |
+| **Requisito Atendido** | [RF01](../../requisitos/requisitos_funcionais.md#rf01) |
 
 ---
 
@@ -42,7 +42,7 @@ Permite ao gerente cadastrar novos usuários operacionais vinculados à sua empr
 
 | **Requisito** | **Descrição** |
 | :------------ | :------------ |
-| **RF01** | O gerente pode cadastrar usuários no sistema, exceto usuários do tipo Gerente. |
+| [**RF01**](../../requisitos/requisitos_funcionais.md#rf01) | O gerente pode cadastrar usuários no sistema, exceto usuários do tipo Gerente. |
 
 ---
 
@@ -50,12 +50,12 @@ Permite ao gerente cadastrar novos usuários operacionais vinculados à sua empr
 
 | **Código** | **Descrição** |
 | :--------: | :------------ |
-| **RN01** | Apenas gerentes e empresas podem cadastrar usuários no sistema. |
-| **RN02** | Apenas empresas podem gerenciar usuários do tipo gerente. O gerente **não pode** cadastrar outro gerente. |
-| **RN03** | Não deve existir usuário que não esteja obrigatoriamente vinculado a uma pessoa ou a uma empresa. |
-| **RN05** | O gerente pode cadastrar apenas usuários vinculados à mesma empresa à qual ele pertence. |
-| **RN07** | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
-| **RN16** | Um usuário somente pode cadastrar usuários com papel hierarquicamente inferior ao seu. O gerente não pode cadastrar outro gerente. |
+| [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01) | Apenas gerentes e empresas podem cadastrar usuários no sistema. |
+| [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02) | Apenas empresas podem gerenciar usuários do tipo gerente. O gerente **não pode** cadastrar outro gerente. |
+| [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03) | Não deve existir usuário que não esteja obrigatoriamente vinculado a uma pessoa ou a uma empresa. |
+| [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05) | O gerente pode cadastrar apenas usuários vinculados à mesma empresa à qual ele pertence. |
+| [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
+| [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) | Um usuário somente pode cadastrar usuários com papel hierarquicamente inferior ao seu. O gerente não pode cadastrar outro gerente. |
 
 ---
 
@@ -68,7 +68,7 @@ Permite ao gerente cadastrar novos usuários operacionais vinculados à sua empr
 | 3 | Seleciona a opção "Cadastrar Usuário". | |
 | 4 | | Exibe formulário de cadastro com campos: nome, e-mail e tipo de usuário. Os tipos disponíveis são apenas os de nível inferior ao gerente: Analista Energético, Analista Financeiro, Investidor e Consumidor. O status é definido como **ativo** por padrão. |
 | 5 | Preenche os dados e confirma o cadastro. | |
-| 6 | | Valida as Regras de Negócio **RN01**, **RN02**, **RN03**, **RN05**, **RN07** e **RN16**, e cria o novo usuário no sistema. |
+| 6 | | Valida as Regras de Negócio [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01), [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02), [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03), [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05), [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16), e cria o novo usuário no sistema. |
 | 7 | Visualiza o usuário cadastrado na listagem. | |
 
 ---
@@ -80,7 +80,7 @@ Permite ao gerente cadastrar novos usuários operacionais vinculados à sua empr
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.1 | Preenche o formulário com dados inválidos ou incompletos. | |
-| 0.2 | | Valida as Regras de Negócio **RN01**, **RN02**, **RN03**, **RN05**, **RN07** e **RN16** aplicáveis. |
+| 0.2 | | Valida as Regras de Negócio [**RN01**](../../regras_de_negocio/regras_de_negocio.md#rn01), [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02), [**RN03**](../../regras_de_negocio/regras_de_negocio.md#rn03), [**RN05**](../../regras_de_negocio/regras_de_negocio.md#rn05), [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16) aplicáveis. |
 | 0.3 | | Exibe mensagens de erro indicando campos inválidos ou duplicidade de dados. |
 | 0.4 | Corrige os dados informados e confirma novamente. | |
 
@@ -89,5 +89,5 @@ Permite ao gerente cadastrar novos usuários operacionais vinculados à sua empr
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.5 | Tenta selecionar o tipo "Gerente" no formulário de cadastro. | |
-| 0.6 | | Valida as Regras de Negócio **RN02** e **RN16**. |
+| 0.6 | | Valida as Regras de Negócio [**RN02**](../../regras_de_negocio/regras_de_negocio.md#rn02) e [**RN16**](../../regras_de_negocio/regras_de_negocio.md#rn16). |
 | 0.7 | | Bloqueia a ação e exibe mensagem informando que gerentes só podem ser cadastrados pela empresa. |

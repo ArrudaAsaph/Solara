@@ -12,7 +12,7 @@
 | **Código** | CDU003-A |
 | **Ator Principal** | Usuário |
 | **Atores Secundários** | Sistema |
-| **Requisito Atendido** | RF18 |
+| **Requisito Atendido** | [RF18](../../requisitos/requisitos_funcionais.md#rf18) |
 
 ---
 
@@ -55,7 +55,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 
 | **Requisito** | **Descrição** |
 | :------------ | :------------ |
-| **RF18** | O usuário pode atualizar apenas os próprios dados não sensíveis, mantendo o histórico das alterações e respeitando as regras de integridade. |
+| [**RF18**](../../requisitos/requisitos_funcionais.md#rf18) | O usuário pode atualizar apenas os próprios dados não sensíveis, mantendo o histórico das alterações e respeitando as regras de integridade. |
 
 ---
 
@@ -63,9 +63,9 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 
 | **Código** | **Descrição** |
 | :--------: | :------------ |
-| **RN07** | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
-| **RN18** | Usuários não administrativos não podem alterar dados sensíveis de suas próprias contas (nome completo, CPF e tipo de perfil). |
-| **RN21** | O usuário autenticado e ativo pode atualizar apenas os próprios dados não sensíveis. Não é permitido editar dados de terceiros neste fluxo. |
+| [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07) | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
+| [**RN18**](../../regras_de_negocio/regras_de_negocio.md#rn18) | Usuários não administrativos não podem alterar dados sensíveis de suas próprias contas (nome completo, CPF e tipo de perfil). |
+| [**RN21**](../../regras_de_negocio/regras_de_negocio.md#rn21) | O usuário autenticado e ativo pode atualizar apenas os próprios dados não sensíveis. Não é permitido editar dados de terceiros neste fluxo. |
 
 ---
 
@@ -76,7 +76,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 | 1 | Acessa a opção "Meu Perfil" ou "Editar meus dados". | |
 | 2 | | Exibe o formulário de edição. Os campos editáveis são: **e-mail, username, senha, e-mail de contato e telefone**. Os campos sensíveis (nome completo, CPF, tipo de perfil) e o status são renderizados como **somente leitura**, sem possibilidade de interação. |
 | 3 | Atualiza os campos desejados e confirma. | |
-| 4 | | Valida as Regras de Negócio **RN07**, **RN18** e **RN21**. |
+| 4 | | Valida as Regras de Negócio [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07), [**RN18**](../../regras_de_negocio/regras_de_negocio.md#rn18) e [**RN21**](../../regras_de_negocio/regras_de_negocio.md#rn21). |
 | 5 | | Salva as alterações realizadas. |
 | 6 | | Registra o histórico das alterações. |
 | 7 | Visualiza os dados atualizados com confirmação de sucesso. | |
@@ -90,7 +90,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.1 | Informa dados inválidos ou duplicados (ex.: e-mail já em uso). | |
-| 0.2 | | Valida a Regra de Negócio **RN07**. |
+| 0.2 | | Valida a Regra de Negócio [**RN07**](../../regras_de_negocio/regras_de_negocio.md#rn07). |
 | 0.3 | | Exibe mensagem de erro indicando a inconsistência. |
 | 0.4 | Corrige os dados e confirma novamente. | |
 
@@ -99,4 +99,4 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 | **Passo** | **Ações do Ator** | **Ações do Sistema** |
 | :-------: | :---------------- | :------------------- |
 | 0.5 | Tenta modificar campo sensível (nome completo, CPF ou tipo de perfil). | |
-| 0.6 | | Valida a Regra de Negócio **RN18**. Os campos sensíveis são renderizados como somente leitura — a ação é bloqueada na interface antes mesmo do envio. |
+| 0.6 | | Valida a Regra de Negócio [**RN18**](../../regras_de_negocio/regras_de_negocio.md#rn18). Os campos sensíveis são renderizados como somente leitura — a ação é bloqueada na interface antes mesmo do envio. |
