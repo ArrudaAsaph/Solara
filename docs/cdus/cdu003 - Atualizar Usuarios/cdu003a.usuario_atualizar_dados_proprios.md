@@ -1,7 +1,7 @@
 # CDU003-A – Atualizar Dados Próprios do Usuário
 
 > **Arquivo:** `cdu003a_usuario_atualizar_dados_proprios.md`
-> **Descrição:** Caso de uso referente à atualização dos próprios dados não sensíveis pelo usuário autenticado. Dados sensíveis são bloqueados para edição neste contexto — sua alteração é exclusiva da Empresa ou Gerente (CDU003-B e CDU003-C).
+> **Descrição:** Caso de uso referente à atualização dos próprios dados não sensíveis pelo usuário autenticado. Dados sensíveis são bloqueados para edição neste contexto — sua alteração é exclusiva da Empresa ou Gerente (CDU003-B).
 
 ---
 
@@ -12,7 +12,7 @@
 | **Código** | CDU003-A |
 | **Ator Principal** | Usuário |
 | **Atores Secundários** | Sistema |
-| **Requisito Atendido** | RF02 |
+| **Requisito Atendido** | RF18 |
 
 ---
 
@@ -55,7 +55,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 
 | **Requisito** | **Descrição** |
 | :------------ | :------------ |
-| **RF02** | O usuário pode atualizar seus próprios dados cadastrais não sensíveis no sistema, mantendo o histórico das alterações. |
+| **RF18** | O usuário pode atualizar apenas os próprios dados não sensíveis, mantendo o histórico das alterações e respeitando as regras de integridade. |
 
 ---
 
@@ -65,6 +65,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 | :--------: | :------------ |
 | **RN07** | Não deve existir mais de um usuário com o mesmo e-mail ou identificador de acesso dentro da mesma empresa. |
 | **RN18** | Usuários não administrativos não podem alterar dados sensíveis de suas próprias contas (nome completo, CPF e tipo de perfil). |
+| **RN21** | O usuário autenticado e ativo pode atualizar apenas os próprios dados não sensíveis. Não é permitido editar dados de terceiros neste fluxo. |
 
 ---
 
@@ -75,7 +76,7 @@ Permite que qualquer usuário autenticado e ativo atualize seus próprios dados 
 | 1 | Acessa a opção "Meu Perfil" ou "Editar meus dados". | |
 | 2 | | Exibe o formulário de edição. Os campos editáveis são: **e-mail, username, senha, e-mail de contato e telefone**. Os campos sensíveis (nome completo, CPF, tipo de perfil) e o status são renderizados como **somente leitura**, sem possibilidade de interação. |
 | 3 | Atualiza os campos desejados e confirma. | |
-| 4 | | Valida as Regras de Negócio **RN07** e **RN18**. |
+| 4 | | Valida as Regras de Negócio **RN07**, **RN18** e **RN21**. |
 | 5 | | Salva as alterações realizadas. |
 | 6 | | Registra o histórico das alterações. |
 | 7 | Visualiza os dados atualizados com confirmação de sucesso. | |
