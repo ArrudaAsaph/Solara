@@ -4,11 +4,11 @@ audit_logger = logging.getLogger("audit")
 
 from contas.models import Pessoa
 from core.services import PermissaoService
+from core.services.grupo_perfil_service import GrupoPerfilService
 from core.error import Erro
-from django.contrib.auth.hashers import check_password
-from django.db import transaction
+
 class PessoaService:
-    
+
     @classmethod
     def _erro_base(cls, *, usuario_logado):
         return {
@@ -19,7 +19,7 @@ class PessoaService:
                 "username": getattr(usuario_logado, "username", None),
             },
         }
-    
+
     # metodo publico para usuarios
     @classmethod
     def listar(cls, *, usuario_logado, filtros=None):
@@ -27,6 +27,14 @@ class PessoaService:
 
         erro_base = cls._erro_base(usuario_logado=usuario_logado)
         permissao = PermissaoService(usuario_logado)
+
+        if not permissao.acesso_permissoes(["contas.view_pessoa"]):
+            return Erro(
+                **erro_base,
+                acao = "listar",
+                mensagem = "Usuário não possui permissão para listar pessoas",
+                status_code = 403
+            )
 
         hierarquia_de_perfil = permissao.hierarquia()
 
@@ -37,7 +45,7 @@ class PessoaService:
                 mensagem = "Usuário não possui permissão para listar pessoas",
                 status_code = 403
             )
-        
+
         qs = (
             Pessoa.objects
                 .select_related("usuario", "empresa")
@@ -58,7 +66,7 @@ class PessoaService:
             qs = qs.filter(
                 nome_completo__icontains = nome
             )
-        
+
         if tipo_perfil:
             if tipo_perfil in hierarquia_de_perfil:
                 qs = qs.filter(
@@ -75,7 +83,7 @@ class PessoaService:
                         "tipos_permitidos": hierarquia_de_perfil,
                     }
                 )
-        
+
         if status:
             qs = qs.filter(usuario__tipo_status=status)
 
@@ -88,19 +96,14 @@ class PessoaService:
 
         permissaoService = PermissaoService(usuario_logado)
 
-        if not permissaoService.acesso(
-            ["EMPRESA", 
-             Pessoa.TipoPerfil.GERENTE, 
-             Pessoa.TipoPerfil.ANALISTA_ENERGETICO, 
-             Pessoa.TipoPerfil.ANALISTA_FINANCEIRO
-             ]):
+        if not permissaoService.acesso_permissoes(["contas.view_pessoa"]):
                 return Erro(
                 **erro_base,
                 acao = "buscar_por_id",
                 mensagem = "Usuário sem permissão para acessar pessoas",
                 status_code = 403
             )
-        
+
         pessoa = (
             Pessoa.objects
             .select_related("usuario", "empresa")
@@ -123,7 +126,7 @@ class PessoaService:
                 mensagem = "Pessoa não encontrada",
                 status_code = 404
             )
-        
+
         hierarquia_de_perfil = permissaoService.hierarquia()
         if not permissaoService.pode_ver(pessoa_alvo = pessoa):
             return Erro(
@@ -138,25 +141,24 @@ class PessoaService:
             )
 
         return pessoa
-    
+
     @classmethod
     @transaction.atomic
     def atualizar(cls, *, data, id, usuario_logado):
         erro_base = cls._erro_base(usuario_logado = usuario_logado)
         permissaoService = PermissaoService(usuario_logado)
 
-        if not permissaoService.acesso(["EMPRESA", "GERENTE"]):
-            print("estour aqui")
+        if not permissaoService.acesso_permissoes(["contas.change_pessoa"]):
             return Erro(
                 **erro_base,
                 acao = "atualizar",
                 mensagem = "Usuário sem permissão para atualizar pessoas",
                 status_code = 403
             )
-        
+
         if "tipo_perfil" in data:
             if (
-                data["tipo_perfil"] == Pessoa.TipoPerfil.GERENTE 
+                data["tipo_perfil"] == Pessoa.TipoPerfil.GERENTE
                 and permissaoService.perfil_logado() == Pessoa.TipoPerfil.GERENTE ):
                     return Erro(
                     **erro_base,
@@ -174,16 +176,20 @@ class PessoaService:
                 mensagem = "Senha inválida",
                 status_code = 401
             )
-        
+
         pessoa_atualizada = cls.buscar_por_id(usuario_logado = usuario_logado, id = id)
 
         if isinstance(pessoa_atualizada, Erro):
             return pessoa_atualizada
-        
+
         alterou = False
 
         if "tipo_perfil" in data:
             pessoa_atualizada.tipo_perfil = data["tipo_perfil"]
+            GrupoPerfilService.sync_usuario_groups(
+                usuario=pessoa_atualizada.usuario,
+                tipo_perfil=data["tipo_perfil"],
+            )
             alterou = True
 
         if "cpf" in data:
@@ -214,4 +220,4 @@ class PessoaService:
         )
 
         return pessoa_atualizada
-        
+

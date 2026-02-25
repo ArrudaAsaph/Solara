@@ -1,4 +1,5 @@
 from contas.models import Empresa, Pessoa, Usuario
+from core.services.grupo_perfil_service import GrupoPerfilService
 
 
 class ContaFactory:
@@ -55,6 +56,10 @@ class ContaFactory:
             telefone=f"1199{seq:06d}",
             usuario=usuario,
         )
+        GrupoPerfilService.sync_usuario_groups(
+            usuario=usuario,
+            tipo_usuario=Usuario.TipoUsuario.EMPRESA,
+        )
         return usuario, empresa
 
     @classmethod
@@ -89,5 +94,9 @@ class ContaFactory:
             empresa=empresa,
             usuario=usuario,
             criado_por=criado_por,
+        )
+        GrupoPerfilService.sync_usuario_groups(
+            usuario=usuario,
+            tipo_perfil=tipo_perfil,
         )
         return usuario, pessoa

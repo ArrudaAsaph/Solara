@@ -34,13 +34,13 @@ class UsuarioService:
                 "username": getattr(usuario_logado, "username", None),
             },
         }
-    
+
 
     @classmethod
     def listar(cls, *, usuario_logado):
         permissaoService = PermissaoService(usuario_logado)
-        
-        if not permissaoService.acesso(["EMPRESA","GERENTE"]):
+
+        if not permissaoService.acesso_permissoes(["contas.view_usuario"]):
             erro_base = cls._erro_base(usuario_logado = usuario_logado)
 
             return Erro(
@@ -49,17 +49,17 @@ class UsuarioService:
                 mensagem = "Usuario sem permissao de acesso",
                 status_code = 403
             )
-        
+
         qs = Usuario.objects.filter(
         pessoa__empresa=usuario_logado.empresa_vinculada
     )
 
         # EMPRESA vê tudo
-        if usuario_logado.tipo_usuario == Usuario.TipoUsuario.EMPRESA:
+        perfil = permissaoService.perfil_logado()
+        if perfil == "EMPRESA":
             return qs
 
         # Pessoa sem perfil válido não vê nada
-        perfil = usuario_logado.pessoa.tipo_perfil
         regra = cls.VISIBILIDADE.get(perfil)
 
         if not regra or regra.get("ver") is False:
@@ -76,4 +76,4 @@ class UsuarioService:
 
         return qs
 
-        
+

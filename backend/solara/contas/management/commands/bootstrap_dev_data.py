@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from contas.models import Empresa, Pessoa, Usuario
+from core.services.grupo_perfil_service import GrupoPerfilService
 
 
 class Command(BaseCommand):
@@ -78,6 +79,10 @@ class Command(BaseCommand):
         user.set_password(password)
         updates.append("password")
         user.save(update_fields=updates)
+        GrupoPerfilService.sync_usuario_groups(
+            usuario=user,
+            tipo_usuario=Usuario.TipoUsuario.PESSOA,
+        )
 
         return user
 
@@ -112,6 +117,11 @@ class Command(BaseCommand):
         user_updates.append("password")
         if user_updates:
             empresa_user.save(update_fields=user_updates)
+
+        GrupoPerfilService.sync_usuario_groups(
+            usuario=empresa_user,
+            tipo_usuario=Usuario.TipoUsuario.EMPRESA,
+        )
 
         empresa_defaults = {
             "razao_social": f"{prefixo.capitalize()} Razao {idx}",
@@ -198,6 +208,11 @@ class Command(BaseCommand):
                 for field, value in pessoa_defaults.items():
                     setattr(pessoa, field, value)
                 pessoa.save(update_fields=list(pessoa_defaults.keys()))
+
+            GrupoPerfilService.sync_usuario_groups(
+                usuario=user,
+                tipo_perfil=perfil,
+            )
 
             created_or_updated += 1
 

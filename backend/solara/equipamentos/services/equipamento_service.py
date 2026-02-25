@@ -19,7 +19,7 @@ class EquipamentoService:
                 "username": getattr(usuario_logado, "username", None),
             },
         }
-    
+
     @classmethod
     @transaction.atomic
     def criar(cls, *, usuario_logado, data):
@@ -27,14 +27,14 @@ class EquipamentoService:
 
         permissaoService = PermissaoService(usuario_logado)
 
-        if not permissaoService.acesso(["EMPRESA", "GERENTE"]):
+        if not permissaoService.acesso_permissoes(["equipamentos.add_equipamento"]):
             return Erro(
                 **erro_base,
                 acao = "criar",
                 mensagem = "Usuario sem permissao cadastro",
                 status_code = 403
             )
-        
+
         fabricante = cls._normalizar_fabricante(data["fabricante"])
         potencia = data["potencia"]
         tensao = data["tensao"]
@@ -57,7 +57,7 @@ class EquipamentoService:
                     "descricao": str(existente)
                 }
             )
-        
+
 
         novo_equipamento = Equipamento(
             fabricante = fabricante,
@@ -81,7 +81,7 @@ class EquipamentoService:
         )
         return novo_equipamento
 
-    @classmethod 
+    @classmethod
     def listar(cls, usuario_logado, filtros = None):
         filtros = filtros or {}
 
@@ -89,14 +89,14 @@ class EquipamentoService:
 
         permissaoService = PermissaoService(usuario_logado)
 
-        if not permissaoService.acesso(["EMPRESA", "GERENTE", "ANALISTA_ENERGETICO", "INVESTIDOR"]):
+        if not permissaoService.acesso_permissoes(["equipamentos.view_equipamento"]):
             return Erro (
                 **erro_base,
                 acao = "listar",
                 mensagem = "Usuário sem permissão para acessar os equipamentos"
             )
-        
-        
+
+
         fabricante = filtros.get("fabricante")
         tipo = filtros.get("tipo_equipamento")
         potencia_min = filtros.get("potencia_min")
@@ -121,8 +121,7 @@ class EquipamentoService:
         return qs.order_by("tipo_equipamento", "fabricante", "potencia")
 
 
-        
+
     @staticmethod
     def _normalizar_fabricante(fabricante):
         return fabricante.upper()
-    

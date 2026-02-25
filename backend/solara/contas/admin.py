@@ -3,6 +3,7 @@ from django.contrib import admin
 from django.core.exceptions import ValidationError
 
 from contas.models import Empresa, Usuario
+from core.services.grupo_perfil_service import GrupoPerfilService
 
 
 class EmpresaAdminForm(forms.ModelForm):
@@ -119,6 +120,10 @@ class EmpresaAdmin(admin.ModelAdmin):
                 is_active=True,
                 password="Lumen@1234",
             )
+            GrupoPerfilService.sync_usuario_groups(
+                usuario=usuario,
+                tipo_usuario=Usuario.TipoUsuario.EMPRESA,
+            )
             obj.usuario = usuario
             # Salva primeiro para garantir que o usuário está vinculado
             super().save_model(request, obj, form, change)
@@ -130,5 +135,5 @@ class EmpresaAdmin(admin.ModelAdmin):
                 obj.usuario.tipo_status = novo_status
                 obj.usuario.is_active = novo_status == Usuario.StatusUsuario.ATIVA
                 obj.usuario.save()
-            
+
             super().save_model(request, obj, form, change)

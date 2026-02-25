@@ -1,5 +1,6 @@
 from contas.models import Pessoa, Empresa, Usuario
 from core.error import Erro
+from core.services.grupo_perfil_service import GrupoPerfilService
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 
@@ -12,14 +13,7 @@ class PermissaoService:
     respeitando a hierarquia de perfis.
     """
 
-    HIERARQUIA = [
-        "EMPRESA",
-        "GERENTE",
-        "ANALISTA_FINANCEIRO",
-        "ANALISTA_ENERGETICO",
-        "INVESTIDOR",
-        "CONSUMIDOR",
-    ]
+    HIERARQUIA = GrupoPerfilService.HIERARQUIA
 
     def __init__(self, user):
         self.user = user
@@ -98,22 +92,14 @@ class PermissaoService:
     # ------------------------------------------------------------------
 
     def perfil_logado(self):
-        empresa = self._get_empresa()
-        if empresa:
-            return "EMPRESA"
-
-        pessoa = self._get_pessoa()
-        if pessoa:
-            return pessoa.tipo_perfil
-
-        return None
+        return GrupoPerfilService.perfil_from_groups(usuario=self.user)
 
     # ------------------------------------------------------------------
     # Hierarquia
     # ------------------------------------------------------------------
 
     def _perfil_valido(self, perfil_logado: str, perfil_requerido: str) -> bool:
-        if perfil_logado == "EMPRESA":
+        if perfil_logado == GrupoPerfilService.PERFIL_EMPRESA:
             return True
 
         try:
@@ -163,6 +149,27 @@ class PermissaoService:
         self._log_warning(erro)
         return False
 
+    def acesso_permissoes(self, permissoes: list[str]):
+        self.ultimo_erro = None
+
+        erro = self._validar_usuario()
+        if erro:
+            self._log_warning(erro)
+            return False
+
+        if not self.user.has_perms(permissoes):
+            erro = self._erro(
+                mensagem="Usuário não possui permissão para executar esta ação",
+                status_code=403,
+                data={
+                    "permissoes_requeridas": permissoes,
+                },
+            )
+            self._log_warning(erro)
+            return False
+
+        return True
+
     def pode_ver(self, *, pessoa_alvo: Pessoa) -> bool:
         if self._validar_usuario():
             return False
@@ -171,7 +178,7 @@ class PermissaoService:
         if not perfil_logado:
             return False
 
-        if perfil_logado == "EMPRESA":
+        if perfil_logado == GrupoPerfilService.PERFIL_EMPRESA:
             return pessoa_alvo.usuario.tipo_usuario != Usuario.TipoUsuario.EMPRESA
 
         if perfil_logado == Pessoa.TipoPerfil.GERENTE:
@@ -190,14 +197,14 @@ class PermissaoService:
             }
 
         return False
-    
+
     def hierarquia(self):
         if self._validar_usuario():
             return []
 
         perfil_logado = self.perfil_logado()
 
-        if perfil_logado == "EMPRESA":
+        if perfil_logado == GrupoPerfilService.PERFIL_EMPRESA:
             return [
                 Pessoa.TipoPerfil.GERENTE,
                 Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
@@ -205,7 +212,7 @@ class PermissaoService:
                 Pessoa.TipoPerfil.INVESTIDOR,
                 Pessoa.TipoPerfil.CONSUMIDOR
             ]
-        
+
         if perfil_logado == Pessoa.TipoPerfil.GERENTE:
             return [
                 Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
@@ -213,7 +220,7 @@ class PermissaoService:
                 Pessoa.TipoPerfil.INVESTIDOR,
                 Pessoa.TipoPerfil.CONSUMIDOR
             ]
-        
+
         if perfil_logado in (
                 Pessoa.TipoPerfil.ANALISTA_ENERGETICO,
                 Pessoa.TipoPerfil.ANALISTA_FINANCEIRO,
@@ -222,5 +229,5 @@ class PermissaoService:
                 Pessoa.TipoPerfil.INVESTIDOR,
                 Pessoa.TipoPerfil.CONSUMIDOR
             ]
-        
+
         return []

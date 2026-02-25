@@ -1,1 +1,2 @@
 from .PermissaoService import PermissaoService
+from .grupo_perfil_service import GrupoPerfilService
