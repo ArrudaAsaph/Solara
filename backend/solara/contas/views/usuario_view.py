@@ -21,7 +21,7 @@ class UsuarioViewMe(APIView):
             200: UsuarioSimpleResponse,
             401: openapi.Response("Não autenticado"),
             },
-        
+
         tags = ["Usuário"],
     )
 
@@ -81,7 +81,7 @@ class UsuarioView(APIView):
             200: UsuarioSimpleResponse,
             401: openapi.Response("Não autenticado"),
             },
-        
+
         tags = ["Usuários"],
     )
 

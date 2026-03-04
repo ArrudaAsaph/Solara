@@ -4,7 +4,7 @@ from contas.models import Usuario
 
 class UsuarioUpdateRequest(serializers.Serializer):
     id = serializers.IntegerField(required = True)
-    
+
     username = serializers.CharField(
         max_length=150,
         required=False
@@ -27,11 +27,11 @@ class UsuarioUpdateRequest(serializers.Serializer):
         required=False,
         write_only=True
     )
-    
+
     email = serializers.EmailField(
         required = False
         )
-    
+
     tipo_status = serializers.ChoiceField(
         choices=Usuario.StatusUsuario.choices,
         required=True
@@ -54,7 +54,7 @@ class UsuarioUpdateRequest(serializers.Serializer):
 
 
 class UsuarioUpdateMeRequest(serializers.Serializer):
-   
+
     username = serializers.CharField(
         max_length=150,
         required=False
@@ -77,12 +77,12 @@ class UsuarioUpdateMeRequest(serializers.Serializer):
         required=False,
         write_only=True
     )
-    
+
     email = serializers.EmailField(
         required = False
         )
-    
-    
+
+
     def validate(self, attrs):
         antiga = attrs.get("antiga_password")
         nova1 = attrs.get("nova_password1")

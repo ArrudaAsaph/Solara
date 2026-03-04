@@ -11,6 +11,8 @@ urlpatterns = [
     path("usuarios/", UsuarioView.as_view(), name = "usuarios"),
     path("pessoas/", PessoaView.as_view(), name = "pessoas"),
     path("pessoas/<id>", PessoaPrivateView.as_view(), name = "pessoas"),
-    
+    path("vendedores/", VendedorView.as_view(), name = "vendedores"),
+    path("vendedores/<id>", VendedorPrivateView.as_view(), name = "vendedores-private"),
+
 
 ]

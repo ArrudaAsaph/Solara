@@ -1,3 +1,4 @@
 from .cadastro_request import CadastroUsuarioRequest
 from .usuario_request import UsuarioUpdateRequest, UsuarioUpdateMeRequest
 from .pessoa_request import PessoaUpdatePrivateRequest
+from .vendedor_request import VendedorCreateRequest, VendedorUpdateRequest
